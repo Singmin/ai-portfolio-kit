@@ -1,0 +1,15 @@
+## A smaller promise
+
+A portfolio assistant should help a reader find the work, rather than invent a better version of its author. This kit uses an explicit public-content index as its only knowledge source.
+
+## Retrieval before generation
+
+The server matches a question against public passages. Without an API key, it returns the closest passages with links. If no passage matches, it says the public material does not answer the question.
+
+With a configured key and model, the model may select source IDs from the retrieved candidates. The server validates those IDs and returns the original excerpts. The model cannot supply facts, external links, tools, or private files to the answer.
+
+## Know the boundary
+
+This is constrained source selection, not a general conversational assistant. It does not browse the web or read a private resume. Keyword retrieval can miss paraphrases. A citation makes a claim traceable; it does not make the source itself correct.
+
+The API applies body limits, schema validation, same-origin checks, persistent local rate limits, and an outbound timeout. For multiple machines, replace the local limiter with shared storage before deployment.
