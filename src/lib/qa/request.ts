@@ -1,11 +1,13 @@
 import { z } from 'zod';
+import { getSiteUrl } from '@/lib/site-url';
 export const questionSchema = z.object({ question: z.string().trim().min(2).max(500), locale: z.enum(['en','zh']) }).strict();
 export class RequestError extends Error { constructor(public status: number, message: string) { super(message); } }
 export function checkRequest(request: Request) {
   // Next may normalize request.url to localhost even when the browser used
   // 127.0.0.1. Host reflects the browser-facing authority; forwarded-host is ignored.
   const publicUrl = new URL(request.url);
-  const expected = process.env.SITE_URL ? new URL(process.env.SITE_URL).origin
+  const configuredUrl = getSiteUrl();
+  const expected = configuredUrl ? new URL(configuredUrl).origin
     : request.headers.get('host') ? new URL(`${publicUrl.protocol}//${request.headers.get('host')}`).origin : publicUrl.origin;
   const origin = request.headers.get('origin');
   if ((origin && origin !== expected) || request.headers.get('sec-fetch-site') === 'cross-site') throw new RequestError(403, 'Cross-origin requests are not allowed.');

@@ -8,9 +8,9 @@ const envelope = z.object({ output: z.array(z.object({ content: z.array(z.object
 export async function answerQuestion(question: string, locale: Locale, options: Options = {}): Promise<Answer> {
   const candidates = retrieve(question, locale);
   const message = text(locale, 'Original excerpts from the public portfolio:', '以下内容摘自作品集公开资料：');
-  // Strip retrieval keywords; only actual source material crosses the boundary.
-  const sources = candidates.map(({ keywords: _keywords, ...source }) => { void _keywords; return source; });
-  if (!sources.length) return { mode: 'offline', message: text(locale, 'The public portfolio does not contain an answer to that question. Try asking about the project, its stack, or customization.', '公开资料中没有这个问题的答案。可以尝试询问项目、技术栈或定制方法。'), sources: [] };
+  // Only authorized citations cross the model boundary; never send the portfolio object.
+  const sources = candidates.map(({ id, title, url, excerpt, revision }) => ({ id, title, url, excerpt, revision }));
+  if (!sources.length) return { mode: 'offline', message: text(locale, 'No authorized public passage answers that question. You can inspect the public pages for more context.', '已授权的公开资料中没有这个问题的答案。可直接阅读公开页面了解更多。'), sources: [] };
   if (!options.apiKey || !options.model) return { mode: 'offline', message, sources };
   try {
     if (options.reserveModelCall && !await options.reserveModelCall()) return { mode: 'fallback', message, sources };

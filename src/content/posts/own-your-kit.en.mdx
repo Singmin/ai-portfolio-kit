@@ -1,14 +1,22 @@
 ## Start with public facts
 
+<PublicExcerpt id="public-profile">
+
 Edit `src/config/profile.ts` to replace the example name, role, public biography, experience, and education. Leave fields empty until you can support them. Only turn off `isExample` after the sample identity is replaced.
+
+</PublicExcerpt>
 
 ## Give the work a case study
 
 Edit `src/config/projects.ts`. Each project describes a problem, a decision, and an outcome. Add repository and demo URLs only when they actually exist. This kit starts with one real local project: itself.
 
-## Write in two languages
+## Choose your writing languages
 
-Add a local `.en.mdx` and `.zh.mdx` file, then register both in `src/content/posts.ts`. The shared slug keeps the language switch on the same article. MDX is executable code, so accept it only from trusted repository maintainers.
+Add one `src/content/posts/my-note.json` record with a shared slug, publication status, date, tags, and the title and excerpt for each available translation. Put the trusted body in `my-note.en.mdx`, `my-note.zh.mdx`, or both. The local registry generates imports, page entries, search data, and sitemap paths together. Development watches records and bodies automatically; startup and production builds also sync them. Use `npm run content:sync` for manual generation when needed.
+
+Choose `enabledLocales`, `defaultLocale`, and `missingTranslation` in `src/config/site.ts`. A missing translation can be hidden or linked to the default-language original. A draft never becomes a public page or an AI source. An example is shown only in the labelled template preview. Publishing an article does not grant AI indexing permission: set its separate `aiIndex` flag and mark approved static paragraphs with `PublicExcerpt` and a stable ID. Excerpts are generated from those visible paragraphs, not copied into another file. The development server watches these edits; builds regenerate them too.
+
+MDX is executable code. Accept it only from trusted repository maintainers; link checks do not make untrusted MDX safe.
 
 ## Record contributions honestly
 

@@ -1,0 +1,7 @@
+{
+  "slug": "own-your-kit", "status": "published", "aiIndex": true, "date": "2026-10-23", "tags": ["Open source", "Next.js"],
+  "translations": {
+    "en": { "title": "Make this space your own", "excerpt": "A small guide to the profile, MDX writing, and contribution record." },
+    "zh": { "title": "把这个空间变成你的", "excerpt": "从个人资料、MDX 文章到贡献记录，一份简短的定制指南。" }
+  }
+}

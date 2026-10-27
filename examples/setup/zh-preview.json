@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "profile": {
+    "isExample": true,
+    "aiIndex": false,
+    "name": { "zh": "示例作者（虚构）" },
+    "role": { "zh": "示例角色，请替换为真实公开资料" },
+    "headline": { "zh": "在这里，介绍你的作品。" },
+    "summary": { "zh": "这是一份初始化预览示例，不代表真实个人经历。" },
+    "bio": { "zh": "这是明确标注的示例资料，用来预览配置生成、主题与模块。请替换为有依据的公开简介。" },
+    "location": { "zh": "" },
+    "email": "hello@example.org",
+    "github": null,
+    "skills": []
+  },
+  "site": {
+    "brand": { "zh": "示例工作室" },
+    "enabledLocales": ["zh"],
+    "defaultLocale": "zh",
+    "appearance": { "preset": "engineering", "motion": "reduced" },
+    "pages": { "resume": true, "projects": false, "blog": false, "contributions": false, "ask": false },
+    "navigation": ["resume"],
+    "home": { "modules": [{ "type": "about", "enabled": true }, { "type": "contact", "enabled": true }] }
+  },
+  "content": { "hideStarterContent": true }
+}

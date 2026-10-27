@@ -1,2 +1,3 @@
 import type { MDXComponents } from 'mdx/types';
-export function useMDXComponents(components: MDXComponents): MDXComponents { return { ...components }; }
+import { PublicExcerpt } from '@/components/public-excerpt';
+export function useMDXComponents(components: MDXComponents): MDXComponents { return { PublicExcerpt, ...components }; }

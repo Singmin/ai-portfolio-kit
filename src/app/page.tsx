@@ -1,2 +1,3 @@
 import { redirect } from 'next/navigation';
-export default function Index() { redirect('/zh'); }
+import { portfolio } from '@/lib/portfolio';
+export default function Index() { redirect(`/${portfolio.site.defaultLocale}`); }

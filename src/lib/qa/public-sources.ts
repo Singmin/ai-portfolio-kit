@@ -1,27 +1,77 @@
-import { profile } from '@/config/profile';
-import { projects } from '@/config/projects';
-import type { Locale } from '@/lib/i18n';
+import { createHash } from 'node:crypto';
+import { portfolio } from '@/lib/portfolio';
+import type { Portfolio } from '@/lib/configuration';
+import { text, type Locale } from '@/lib/i18n';
 import type { Citation } from './types';
-export type PublicSource = Citation & { keywords: string };
-// Explicit allowlist. Never walk the filesystem, crawl URLs, or import private CVs.
-// Keep every excerpt visible at its linked public page.
-export function publicSources(locale: Locale): PublicSource[] {
-  const zh = locale === 'zh'; const p = projects[0];
-  return [
-    { id: 'profile', title: zh ? '个人简介' : 'Public profile', url: `/${locale}/resume`,
-      excerpt: profile.bio[locale], keywords: 'profile biography person name about 简介 个人 姓名 关于' },
-    { id: 'stack', title: zh ? '技术栈' : 'Technology stack', url: `/${locale}/projects/ai-portfolio-kit`,
-      excerpt: p.stack.join(' / '), keywords: 'technology stack technologies skills framework typescript next react mdx tailwind 技术栈 技能 框架 技术' },
-    { id: 'project', title: 'AI Portfolio Kit', url: `/${locale}/projects/ai-portfolio-kit`,
-      excerpt: p.decisions[locale], keywords: 'portfolio project architecture design decisions built 项目 作品 架构 设计 决策' },
-    { id: 'ai', title: zh ? '让来源说话' : 'Let the source do the talking', url: `/${locale}/blog/evidence-first-ai`,
-      excerpt: zh ? '服务器先把问题与公开段落进行匹配。没有 API Key 时，返回最相关的原文摘录和页面链接；如果没有匹配资料，就说明公开内容不足以回答。' : 'The server matches a question against public passages. Without an API key, it returns the closest passages with links. If no passage matches, it says the public material does not answer the question.',
-      keywords: 'ai assistant safety key sources answers offline retrieval privacy 问答 助手 安全 密钥 降级 来源 隐私 公开 资料' },
-    { id: 'customize', title: zh ? '把这个空间变成你的' : 'Make this space your own', url: `/${locale}/blog/own-your-kit`,
-      excerpt: zh ? '修改 src/config/profile.ts，替换示例姓名、职位、公开简介、工作经历和教育背景。没有依据的字段先留空。完成替换后，再把 isExample 设为 false。' : 'Edit src/config/profile.ts to replace the example name, role, public biography, experience, and education. Leave fields empty until you can support them. Only turn off isExample after the sample identity is replaced.',
-      keywords: 'customize configuration edit template reuse setup personal 定制 修改 配置 模板 复用 替换' },
-    { id: 'contributions', title: zh ? '开源贡献记录' : 'Open-source record', url: `/${locale}/contributions`,
-      excerpt: zh ? '暂未添加外部社区贡献。' : 'No external contributions added yet.',
-      keywords: 'contributions merged pull request community github opensource 开源 社区 贡献 合并' },
-  ];
+
+type Category = 'skills' | 'role' | 'contribution' | 'contact' | 'article' | 'project' | 'profile';
+export type PublicSource = Citation & { keywords: string; category: Category; subject: string };
+
+export function buildPublicSources(locale: Locale, content: Portfolio): PublicSource[] {
+  if (!content.enabled('ask') || !content.site.enabledLocales.includes(locale)) return [];
+  const sources: PublicSource[] = [];
+  const add = (id: string, title: string, url: string, original: string, category: Category, keywords: string, subject = title) => {
+    if (!original.trim()) return;
+    const excerpt = original.trim().slice(0, 2000);
+    const revision = createHash('sha256').update(JSON.stringify([locale, title, url, original])).digest('hex').slice(0, 16);
+    sources.push({ id, title, url, excerpt, revision, category, keywords, subject });
+  };
+  const { profile } = content;
+  // Example identity is never evidence about a real person, even if opted in.
+  if (content.enabled('resume') && !profile.isExample && profile.aiIndex === true) {
+    const url = `/${locale}/resume`;
+    add('profile', text(locale, 'Public profile', '个人简介'), url, profile.bio[locale], 'profile', 'profile biography person about 简介 个人 关于');
+    add('profile:skills', text(locale, 'Public skills', '公开技能'), url, profile.skills.join(' / '), 'skills', 'skills abilities 技能 能力');
+    if (profile.email) add('profile:contact', text(locale, 'Public contact', '公开联系方式'), url, profile.email, 'contact', 'contact email reach 联系 邮箱 联系方式');
+    if (profile.github) add('profile:github', 'GitHub', url, profile.github, 'contact', 'contact github reach 联系 主页 联系方式');
+  }
+  if (content.enabled('projects')) for (const project of content.projects) {
+    if (project.aiIndex !== true || (project.publication ?? 'published') !== 'published') continue;
+    const url = `/${locale}/projects/${project.slug}`;
+    add(`project:${project.slug}:stack`, `${project.name} · ${text(locale, 'Technology stack', '技术栈')}`, url, project.stack.join(' / '), 'skills', 'technology stack technologies skills 技术栈 技能 技术', project.name);
+    for (const field of ['summary', 'problem', 'decisions', 'outcome', 'role', 'contribution'] as const) {
+      const excerpt = project[field]?.[locale];
+      if (!excerpt) continue;
+      const category = field === 'role' || field === 'contribution' ? 'role' : 'project';
+      const keywords = category === 'role' ? 'author role responsibility contribution scope 作者 角色 个人 职责 贡献 范围' : 'portfolio project architecture design decisions result 项目 作品 架构 设计 决策 结果';
+      add(`project:${project.slug}:${field}`, project.name, url, excerpt, category, keywords, project.name);
+    }
+  }
+  for (const post of content.posts) {
+    if (!content.enabled('blog') || post.status !== 'published' || post.aiIndex !== true || !post.translations[locale]) continue;
+    for (const passage of post.passages?.[locale] ?? []) {
+      add(`post:${post.slug}:${passage.id}`, post.translations[locale]!.title, `/${locale}/blog/${post.slug}#evidence-${passage.id}`, passage.excerpt,
+        'article', `${post.translations[locale]!.title} ${post.tags.join(' ')} article writing note 文章 笔记`);
+    }
+  }
+  if (content.enabled('contributions')) for (const item of content.contributions) {
+    if (item.aiIndex !== true || (item.publication ?? 'published') !== 'published') continue;
+    add(`contribution:${encodeURIComponent(item.url)}`, item.title, `/${locale}/contributions`, `${item.status} · ${item.summary[locale]}`, 'contribution', 'contributions pull request community github opensource 开源 社区 贡献 合并');
+  }
+  return sources;
+}
+
+export function publicSources(locale: Locale): PublicSource[] { return buildPublicSources(locale, portfolio); }
+
+export function suggestedQuestions(locale: Locale, sources: PublicSource[]): string[] {
+  const questions: string[] = [];
+  for (const category of ['skills', 'role', 'contribution', 'contact', 'article', 'profile', 'project'] as const) {
+    const source = sources.find(source => source.category === category);
+    if (!source) continue;
+    const subject = source.subject.slice(0, 160);
+    const question = {
+      skills: source.id === 'profile:skills'
+        ? text(locale, 'What skills are listed in the public profile?', '公开资料列出了哪些技能？')
+        : text(locale, `What technology stack does ${subject} use?`, `${subject} 使用哪些技术栈？`),
+      role: text(locale, `What is the author's role in ${subject}?`, `作者在 ${subject} 中的职责是什么？`),
+      contribution: text(locale, `What public contribution is recorded for ${subject}?`, `${subject} 有哪些公开贡献记录？`),
+      contact: text(locale, 'How can I contact the author?', '如何联系作者？'),
+      article: text(locale, `What does “${subject}” explain?`, `《${subject}》介绍了什么？`),
+      profile: text(locale, 'What does the public profile say?', '公开资料如何介绍作者？'),
+      project: text(locale, `What decisions are documented for ${subject}?`, `${subject} 记录了哪些工程决策？`),
+    }[category];
+    questions.push(question);
+    if (questions.length === 4) break;
+  }
+  return questions;
 }

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "profile": {
+    "isExample": true, "aiIndex": false,
+    "name": { "en": "Example author (fictional)" },
+    "role": { "en": "Illustrative software role" },
+    "headline": { "en": "A resume layout, ready for your facts." },
+    "summary": { "en": "Fictional example data for the compact resume preset." },
+    "bio": { "en": "This is an explicitly fictional layout example. Replace every record with verified public information before publishing a personal portfolio." },
+    "location": { "en": "" }, "email": "hello@example.org", "github": null,
+    "skills": ["Illustrative TypeScript skill", "Illustrative API design skill"],
+    "experience": [{ "company": "Example team (fictional)", "period": "Illustrative period", "role": { "en": "Example role" }, "description": { "en": "Layout demonstration only; this is not a real employment claim, client, result or metric." } }],
+    "education": [{ "institution": "Example institution (fictional)", "period": "Illustrative period", "degree": { "en": "Example programme; not a credential claim" } }]
+  },
+  "site": {
+    "brand": { "en": "Example Portfolio" }, "enabledLocales": ["en"], "defaultLocale": "en",
+    "appearance": { "preset": "resume", "motion": "reduced" },
+    "pages": { "resume": true, "projects": false, "blog": false, "contributions": false, "ask": false },
+    "navigation": ["resume"],
+    "home": { "modules": [{ "type": "experience", "enabled": true }, { "type": "about", "enabled": true }, { "type": "contact", "enabled": true }] }
+  },
+  "content": { "hideStarterContent": true }
+}

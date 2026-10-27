@@ -4,7 +4,11 @@ A portfolio assistant should help a reader find the work, rather than invent a b
 
 ## Retrieval before generation
 
+<PublicExcerpt id="retrieval">
+
 The server matches a question against public passages. Without an API key, it returns the closest passages with links. If no passage matches, it says the public material does not answer the question.
+
+</PublicExcerpt>
 
 With a configured key and model, the model may select source IDs from the retrieved candidates. The server validates those IDs and returns the original excerpts. The model cannot supply facts, external links, tools, or private files to the answer.
 

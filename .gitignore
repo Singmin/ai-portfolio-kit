@@ -11,3 +11,5 @@ test-results/
 *.tsbuildinfo
 next-env.d.ts
 *.log
+# Local owner-private Sites identity; deployment credentials are never written here.
+/deploy/sites-preview.json

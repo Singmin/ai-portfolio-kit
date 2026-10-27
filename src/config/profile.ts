@@ -1,9 +1,12 @@
 import type { Localized } from '@/lib/i18n';
+import { customization } from './customization';
+import { customizeProfile } from './customization-schema.mjs';
 
 // All entries in this file are PUBLIC. Replace the clearly labelled sample
 // identity before publication. Do not put addresses, credentials, or private CVs here.
-export const profile = {
+const defaultProfile = {
   isExample: true,
+  aiIndex: false as boolean,
   name: { en: 'Your name', zh: '你的名字' } satisfies Localized,
   role: { en: 'Software engineer', zh: '软件工程师' } satisfies Localized,
   headline: { en: 'Work, with evidence.', zh: '用作品，讲清能力。' } satisfies Localized,
@@ -22,3 +25,4 @@ export const profile = {
   experience: [] as { company: string; period: string; role: Localized; description: Localized }[],
   education: [] as { institution: string; period: string; degree: Localized }[],
 };
+export const profile = customizeProfile(defaultProfile, customization);

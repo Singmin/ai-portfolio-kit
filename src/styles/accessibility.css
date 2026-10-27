@@ -1,0 +1,48 @@
+/* Shared keyboard, motion and print behavior follows every preset. */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+.skip-link { position: absolute; top: -100px; left: 20px; z-index: 100; background: var(--accent); color: var(--accent-ink); padding: 12px 20px; }
+.skip-link:focus { top: 10px; }
+
+@keyframes arrive { from { opacity: .55; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes headline-open { from { clip-path: inset(0 0 100%); transform: translateY(12px); } to { clip-path: inset(0); transform: translateY(0); } }
+@keyframes preview-drift { from { transform: scale(1); } to { transform: scale(1.02); } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-motion="full"] .hero h1 { animation: headline-open 800ms var(--ease-out) both; }
+  [data-motion="full"] :is(.hero-role, .hero-description, .hero-bottom > .button, .site-header .brand, .site-header nav > a, .document-page > h1) { animation: arrive var(--t-reveal) var(--ease-out) both; }
+  [data-motion="full"] .hero-role { animation-delay: 100ms; }
+  [data-motion="full"] .hero-description { animation-delay: 180ms; }
+  [data-motion="full"] .hero-bottom > .button { animation-delay: 260ms; }
+  [data-motion="full"] .site-header nav > a:nth-child(2) { animation-delay: 60ms; }
+  [data-motion="full"] .site-header nav > a:nth-child(3) { animation-delay: 120ms; }
+  [data-motion="full"] .site-header nav > a:nth-child(4) { animation-delay: 180ms; }
+  @supports (animation-timeline: view()) {
+    [data-motion="full"] :is(.work-section h2, .project-names, .project-summary, .preview-gallery figure, .notes-section h2, .note-rows a, .about-section h2, .about-section p, .ask-section h2, .ask-section > div) { animation: arrive linear both; animation-timeline: view(); animation-range: entry 0% entry 24%; }
+  }
+  @media (min-width: 1100px) {
+    [data-motion="full"][data-preset="editorial"] .preview-gallery a:first-child img { animation: preview-drift 9s ease-in-out infinite alternate; }
+  }
+}
+[data-motion="reduced"] { scroll-behavior: auto; }
+[data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media print {
+  @page { size: A4; margin: 15mm; }
+  html { color-scheme: light; }
+  body { background: white; color: black; font-family: Arial, sans-serif; font-size: 11pt; }
+  .site-header, .site-footer, .appearance-bar, .print-button, .skip-link, .example-notice { display: none; }
+  .document-page { padding: 0; min-height: 0; }
+  html[data-preset] .document-page h1 { font-family: inherit; font-size: 30pt; }
+  .resume-intro { display: grid; grid-template-columns: 1fr 1.2fr; margin: 22pt 0; gap: 24pt; }
+  .resume-intro h2 { font-size: 22pt; }
+  .resume-page .resume-row { display: grid; grid-template-columns: 1fr 2fr; margin-top: 24pt; gap: 24pt; }
+  .resume-row article { break-inside: avoid; }
+  .resume-row h2, h3 { font-size: 14pt; }
+  .lead { font-size: 13pt; }
+  a { color: black; }
+  p { max-width: none; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

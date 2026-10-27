@@ -10,7 +10,7 @@ const request = (body = '{"question":"technology stack","locale":"en"}', headers
 describe('ask route integration', () => {
   it('returns a no-store offline response with valid citations', async () => {
     const response = await POST(request()); expect(response.status).toBe(200); expect(response.headers.get('cache-control')).toBe('no-store');
-    const answer = await response.json(); expect(answer.mode).toBe('offline'); expect(answer.sources[0].id).toBe('stack');
+    const answer = await response.json(); expect(answer.mode).toBe('offline'); expect(answer.sources[0].id).toBe('project:ai-portfolio-kit:stack');
   });
   it('returns 429 with Retry-After and persists across requests', async () => {
     for(let i=0;i<10;i++) expect((await POST(request())).status).toBe(200);

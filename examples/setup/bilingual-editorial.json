@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "profile": {
+    "isExample": true, "aiIndex": false,
+    "name": { "en": "Example author (fictional)", "zh": "示例作者（虚构）" },
+    "role": { "en": "Illustrative engineering role", "zh": "示例工程角色" },
+    "headline": { "en": "An editorial home for documented work.", "zh": "用经过核验的作品，填满这个空间。" },
+    "summary": { "en": "A bilingual layout example using the real starter project and template documentation.", "zh": "使用真实模板项目和说明文档，演示双语编辑式布局。" },
+    "bio": { "en": "This identity is fictional. The retained Kit project and articles describe the starter itself and do not imply a real employment history or external adoption.", "zh": "身份为虚构示例；保留的 Kit 项目与文章只介绍模板本身，不代表实际任职、客户成果或外部用户。" },
+    "location": { "en": "", "zh": "" }, "email": "hello@example.org", "github": null, "skills": []
+  },
+  "site": {
+    "brand": { "en": "Example Studio", "zh": "示例工作室" }, "enabledLocales": ["en", "zh"], "defaultLocale": "zh",
+    "appearance": { "preset": "editorial" },
+    "pages": { "resume": true, "projects": true, "blog": true, "contributions": false, "ask": true },
+    "navigation": ["resume", "projects", "blog"],
+    "home": { "modules": [{ "type": "posts", "enabled": true, "limit": 2 }, { "type": "projects", "enabled": true, "limit": 1 }, { "type": "about", "enabled": true }, { "type": "assistant", "enabled": true }] }
+  },
+  "content": { "hideStarterContent": false }
+}

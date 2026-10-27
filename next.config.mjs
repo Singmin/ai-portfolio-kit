@@ -1,9 +1,13 @@
 import createMDX from '@next/mdx';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generateRegistry, watchRegistry } from './scripts/content-registry.mjs';
+
+generateRegistry(dirname(fileURLToPath(import.meta.url)));
 
 const withMDX = createMDX({});
-export default withMDX({
+const config = withMDX({
+  ...(process.env.PORTFOLIO_STATIC_EXPORT === '1' ? { output: 'export', trailingSlash: true } : {}),
   outputFileTracingRoot: dirname(fileURLToPath(import.meta.url)),
   turbopack: { root: dirname(fileURLToPath(import.meta.url)) },
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
@@ -18,3 +22,7 @@ export default withMDX({
     ] }];
   },
 });
+export default function nextConfig(phase) {
+  if (phase === 'phase-development-server') watchRegistry(dirname(fileURLToPath(import.meta.url)));
+  return config;
+}

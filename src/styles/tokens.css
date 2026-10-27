@@ -1,0 +1,72 @@
+@font-face {
+  font-family: Imbue;
+  src: url('/fonts/imbue-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: Albert;
+  src: url('/fonts/albert-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Shared roles. Preset geometry, palette, type and density are independent. */
+:root {
+  --bg: #0f1f10;
+  --surface: #162a17;
+  --ink: #ffffff;
+  --muted: #c2cec2;
+  --accent: #c6f19d;
+  --accent-ink: #0f1f10;
+  --field: #f4f6f1;
+  --field-ink: #0f1f10;
+  --placeholder: #4c5c4d;
+  --body-font: Albert, 'Microsoft YaHei', Arial, sans-serif;
+  --display-font: Imbue, Georgia, 'SimSun', serif;
+  --body: clamp(1rem, .94rem + .25vw, 1.1875rem);
+  --small: .875rem;
+  --lead: clamp(1.25rem, 1.1rem + .7vw, 1.625rem);
+  --heading: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --display: clamp(4.25rem, 13vw, 12.5rem);
+  --gutter: clamp(20px, 2.3vw, 36px);
+  --section-space: clamp(80px, 9vw, 130px);
+  --item-space: 64px;
+  --media-ratio: 4 / 3;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --t-hover: 180ms;
+  --t-reveal: 700ms;
+}
+[data-palette="forest"] { color-scheme: dark; }
+[data-palette="blueprint"] {
+  color-scheme: light;
+  --bg: #edf2f5;
+  --surface: #e0e8ee;
+  --ink: #152d40;
+  --muted: #40566a;
+  --accent: #1857b7;
+  --accent-ink: #ffffff;
+  --field: #ffffff;
+  --field-ink: #152d40;
+  --placeholder: #40566a;
+}
+[data-palette="paper"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #f0f2ef;
+  --ink: #17231c;
+  --muted: #47544b;
+  --accent: #245c3e;
+  --accent-ink: #ffffff;
+  --field: #f3f5f2;
+  --field-ink: #17231c;
+  --placeholder: #47544b;
+}
+[data-typography="sans"] { --display-font: var(--body-font); }
+[data-density="compact"] {
+  --section-space: 64px;
+  --item-space: 36px;
+  --body: 1rem;
+}
+[data-media-ratio="square"] { --media-ratio: 1; }
+[data-media-ratio="native"] { --media-ratio: auto; }

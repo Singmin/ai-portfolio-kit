@@ -1,0 +1,7 @@
+{
+  "slug": "evidence-first-ai", "status": "published", "aiIndex": true, "date": "2026-10-23", "tags": ["AI", "Engineering"],
+  "translations": {
+    "en": { "title": "Let the source do the talking", "excerpt": "Why this portfolio returns public excerpts instead of invented answers." },
+    "zh": { "title": "让来源说话", "excerpt": "为什么这个作品集返回公开原文，而不凭空生成个人经历。" }
+  }
+}

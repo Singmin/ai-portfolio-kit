@@ -1,6 +1,10 @@
 ## 从公开事实开始
 
+<PublicExcerpt id="public-profile">
+
 修改 `src/config/profile.ts`，替换示例姓名、职位、公开简介、工作经历和教育背景。没有依据的字段先留空。完成替换后，再把 `isExample` 设为 `false`。
+
+</PublicExcerpt>
 
 ## 为作品写一个案例
 
@@ -8,7 +12,11 @@
 
 ## 用两种语言记录
 
-新增本地 `.en.mdx` 和 `.zh.mdx` 文件，在 `src/content/posts.ts` 中注册。相同的 slug 可以让切换语言时保留文章。MDX 是可执行代码，因此只接受可信仓库维护者提交的文件。
+新增一份 `src/content/posts/my-note.json`，维护共用 slug、发布状态、日期、标签，以及已有翻译的标题和摘要。正文放在 `my-note.en.mdx`、`my-note.zh.mdx` 中，可只提供一种语言。本地登记脚本共同生成导入、页面、搜索数据和站点地图路径。开发服务器会自动监视登记与正文变化，开发启动和生产构建也会同步；需要时可执行 `npm run content:sync` 手动生成。
+
+在 `src/config/site.ts` 设置 `enabledLocales`、`defaultLocale` 和 `missingTranslation`。缺失翻译时可隐藏文章，或链接到默认语言原文。草稿不公开，也不进入 AI 来源；示例只在已标注的模板预览中显示。发布文章不会自动授予 AI 索引权限：还需设置独立的 `aiIndex`，并用带稳定 ID 的 `PublicExcerpt` 标记获准的静态正文段落。摘录直接从可见原文生成，无需复制到另一份文件。开发服务器会监视这些修改，构建时也会重新生成。
+
+MDX 是可执行代码，只接受可信仓库维护者提交的文件；链接校验不能让不可信 MDX 变得安全。
 
 ## 如实记录贡献
 

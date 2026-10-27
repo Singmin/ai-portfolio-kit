@@ -1,4 +1,4 @@
 import type { Localized } from '@/lib/i18n';
-export type Contribution = { title: string; url: string; status: 'open' | 'merged' | 'closed'; summary: Localized };
+export type Contribution = { title: string; url: string; status: 'open' | 'merged' | 'closed'; summary: Localized; publication?: 'published' | 'draft' | 'example'; aiIndex?: boolean };
 // Only add verified public contribution URLs and their actual status.
 export const contributions: Contribution[] = [];
